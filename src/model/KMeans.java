@@ -1,5 +1,5 @@
 /*
- *  Created by Gulzar Safar on 12/28/2020
+ *  Created by Gulzar Safar & Aghateymur Hasanzade on 12/28/2020
  */
 
 package model;
@@ -122,7 +122,7 @@ public class KMeans {
             int center_x = centers.get(index[0]).getAttribute(0);
             int center_y = centers.get(index[0]).getAttribute(1);
 
-            x = (int) Utility.nextGaussian(60, center_x);
+            x = (int) Utility.nextGaussian(65, center_x);
             y = (int) Utility.nextGaussian(70, center_y);
 
             point.setAttribute(0, x);

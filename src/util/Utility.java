@@ -1,5 +1,5 @@
 /*
- *  Created by Gulzar Safar on 12/28/2020
+ *  Created by Gulzar Safar & Aghateymur Hasanzade on 12/28/2020
  */
 
 package util;
@@ -253,4 +253,9 @@ public class Utility {
         return Math.abs(rand.nextGaussian())*deviation + center;
     }
 
+    // Method  to find logarithm
+    public static double log2(double x){
+        if (x < 0.000001) return 0;
+        return Math.log(x)/Math.log(2);
+    }
 }

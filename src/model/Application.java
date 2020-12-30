@@ -1,11 +1,12 @@
 /*
- *  Created by Gulzar Safar on 12/28/2020
+ *  Created by Gulzar Safar & Aghateymur Hasanzade on 12/28/2020
  */
 
 package model;
 
 import util.Utility;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 
 public class Application {
@@ -14,12 +15,14 @@ public class Application {
 
 
         // Number of clusters
-        int k = 3;
+        int k = 5;
+        double entropy;
 
 
         ArrayList<ArrayList<Integer>> points = Utility.createData(100);
         ArrayList<ArrayList<Integer>> kCenters = Utility.createKCenters(k);
         ArrayList<ArrayList<Point>> centerOccur = new ArrayList<ArrayList<Point>>(32);
+
 
 
         // adding new centers to points
@@ -44,23 +47,26 @@ public class Application {
                 centerList.add(classifier.getCluster(j).getCenter());
 
             }
-            centerOccur.add(centerList);
 
+            if(centerOccur.contains(centerList) == false) {
+                centerOccur.add(centerList);
+            }
 
         }
+
+        entropy = Utility.log2(centerOccur.size());
+
+        System.out.println(entropy);
 
         System.out.println("\n*** Final clusters ***");
         classifier.printClusters();
 
-        // print centers
-        System.out.println("Centers:");
-        System.out.println(centerOccur);
 
-        // Compute entropy of centers of clusters
-        System.out.println("Entropy of clusters");
-        ArrayList<Float> entropy = Utility.getEntropyOfList(centerOccur);
 
-        entropy.forEach(el -> System.out.println(el.toString()));
+
+//        System.out.println(centerOccur.size());
+//        centerOccur.forEach(element -> System.out.println(element.toString()));
+
 
         // Exporting data to file
         Utility.exportDataToCSV("clusters.data", classifier.toString());

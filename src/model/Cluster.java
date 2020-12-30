@@ -1,5 +1,5 @@
 /*
- *  Created by Gulzar Safar on 12/28/2020
+ *  Created by Gulzar Safar & Aghateymur Hasanzade on 12/28/2020
  */
 
 package model;
@@ -155,6 +155,10 @@ public class Cluster {
         return maxX;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getScattering(){
         ArrayList<Integer> sameIndexes = new ArrayList<>();
         ArrayList<Float> probs = new ArrayList<>();
