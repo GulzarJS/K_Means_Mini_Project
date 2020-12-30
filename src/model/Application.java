@@ -15,23 +15,19 @@ public class Application {
 
 
         // Number of clusters
-        int k = 5;
+        int k = 3;
         double entropy;
 
 
-        ArrayList<ArrayList<Integer>> points = Utility.createData(100);
-        ArrayList<ArrayList<Integer>> kCenters = Utility.createKCenters(k);
+        ArrayList<Point> kCenters = Utility.createKCenters(k);
+        ArrayList<Point> data = Utility.createData(100, kCenters);
         ArrayList<ArrayList<Point>> centerOccur = new ArrayList<ArrayList<Point>>(32);
 
 
 
-        // adding new centers to points
-        kCenters.forEach(center -> {
-            points.add(center);
-        });
 
         // Creating k-means object
-        KMeans classifier = new KMeans(points, kCenters,  k, 2);
+        KMeans classifier = new KMeans(data, k);
 
         // Creating initial clusters
         System.out.println("*** Initial clusters ***");
@@ -54,14 +50,15 @@ public class Application {
 
         }
 
-        entropy = Utility.log2(centerOccur.size());
 
-        System.out.println(entropy);
 
         System.out.println("\n*** Final clusters ***");
         classifier.printClusters();
 
 
+        entropy = Utility.log2(centerOccur.size());
+
+        System.out.println(entropy);
 
 
 //        System.out.println(centerOccur.size());

@@ -50,7 +50,13 @@ public class Point {
     public void addTo(Point p){
         Point point = new Point(this.nbAttributes);
         float accu  = 0;
+
         for (int i = 0; i < p.attributes.size(); i++){
+//            System.out.println(accu);
+//            System.out.println(p.attributes.get(i));
+            if(i > 1){
+                System.out.println("smth");
+            }
             accu = this.attributes.get(i) + p.attributes.get(i);
             this.attributes.set(i,Math.round(accu)) ;
 //            System.out.print(accu + " ");

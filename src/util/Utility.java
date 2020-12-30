@@ -97,25 +97,43 @@ public class Utility {
      * @param   dataSize  number of instances in data
      * @return  data      created data
      */
-    public static ArrayList<ArrayList<Integer>> createData(int dataSize){
+    public static ArrayList<Point> createData(int dataSize, ArrayList<Point> kCenter){
 
 
-        ArrayList<ArrayList<Integer>> data = new ArrayList<>(dataSize);
+        ArrayList<Point> data = new ArrayList<>(dataSize);
 
-        int x, y;
+        int x, y, index;
 
         for (int i = 0; i < 100 ; i++) {
 
-            ArrayList<Integer> point = new ArrayList<>(2);
+            Point point = new Point(2);
 
-            x = rand.nextInt(1000);
-            y = rand.nextInt(400);
+            // Select a random center c between 0 and k-1
+            index = rand.nextInt(kCenter.size());
 
-            point.add(x);
-            point.add(y);
+            int center_x = kCenter.get(index).getAttribute(0);
+            int center_y = kCenter.get(index).getAttribute(1);
+            int var_x =  kCenter.get(index).getAttribute(2);
+            int var_y =  kCenter.get(index).getAttribute(3);
+
+
+            x = (int) Utility.nextGaussian(var_x, center_x);
+            y = (int) Utility.nextGaussian(var_y, center_y);
+
+            point.getAttributes().add(x);
+            point.getAttributes().add(y);
 
             data.add(point);
+
         }
+        // adding new centers to points
+
+        kCenter.forEach(center -> {
+            Point point = new Point(2);
+            point.getAttributes().add(center.getAttribute(0));
+            point.getAttributes().add(center.getAttribute(1));
+            data.add(point);
+        });
 
         return data;
     }
@@ -126,38 +144,28 @@ public class Utility {
      * @param   k         number of centers (also clusters)
      * @return  data      created data
      */
-    public static ArrayList<ArrayList<Integer>> createKCenters(int k){
+    public static ArrayList<Point> createKCenters(int k){
 
 
-        ArrayList<ArrayList<Integer>> kCenters = new ArrayList<>(k);
+        ArrayList<Point> kCenters = new ArrayList<>(k);
 
-        int x, y, xVariance, yVariance;
+        int x, y;
 
         for (int i = 0; i < k ; i++) {
 
-            ArrayList<Integer> point = new ArrayList<>(4);
+            Point point = new Point(4);
 
             x = rand.nextInt(1000);
             y = rand.nextInt(400);
 
-            point.add(x);
-            point.add(y);
+            point.getAttributes().add(x);
+            point.getAttributes().add(y);
+            point.getAttributes().add(rand.nextInt((80 - 60) + 1) + 60);
+            point.getAttributes().add(rand.nextInt((80 - 60) + 1) + 60);
 
             kCenters.add(point);
         }
 
-        for (int i = 0; i < k ; i++) {
-
-            ArrayList<Integer> point = new ArrayList<>(4);
-
-            x = rand.nextInt(1000);
-            y = rand.nextInt(400);
-
-            point.add(x);
-            point.add(y);
-
-            kCenters.add(point);
-        }
 
         return kCenters;
     }
@@ -216,32 +224,32 @@ public class Utility {
     }
 
 
-    /**
-     * Function to convert List of Points object To List of ArrayList
-     */
-    public  static ArrayList<ArrayList<Integer>> convertPointToList(ArrayList<Point> points){
-
-        ArrayList<ArrayList<Integer>> pointList = Utility.createData(points.size());
-
-
-        for (int i = 0; i < 100 ; i++) {
-
-            int coordinate;
-
-            ArrayList<Integer> point = new ArrayList<Integer>(points.get(0).getDimension());
-
-            for (int j = 0; j < points.get(0).getDimension(); j++) {
-
-                coordinate = points.get(i).getAttribute(j);
-                point.add(coordinate);
-            }
-
-            pointList.add(point);
-        }
-
-        return pointList;
-
-    }
+//    /**
+//     * Function to convert List of Points object To List of ArrayList
+//     */
+//    public  static ArrayList<ArrayList<Integer>> convertPointToList(ArrayList<Point> points){
+//
+//        ArrayList<ArrayList<Integer>> pointList = Utility.createData(points.size(),);
+//
+//
+//        for (int i = 0; i < 100 ; i++) {
+//
+//            int coordinate;
+//
+//            ArrayList<Integer> point = new ArrayList<Integer>(points.get(0).getDimension());
+//
+//            for (int j = 0; j < points.get(0).getDimension(); j++) {
+//
+//                coordinate = points.get(i).getAttribute(j);
+//                point.add(coordinate);
+//            }
+//
+//            pointList.add(point);
+//        }
+//
+//        return pointList;
+//
+//    }
 
     /**
      *  Function to get random gaussian value
