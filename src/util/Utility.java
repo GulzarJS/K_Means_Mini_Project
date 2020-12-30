@@ -17,7 +17,7 @@ public class Utility {
 
 
     /**
-     * Function to create new csv file and write all data into it
+     * Method to create new csv file and write all data into it
      */
     public static void exportDataToCSV(String filename, String data) {
         try {
@@ -29,105 +29,52 @@ public class Utility {
         }
     }
 
-    /**
-     * Function to find mean of population (number => (x or y))
-     * @param points             ArrayList of coordinates
-     * @param attributeIndex     Index of attribute, which we want to find mean
-     * @return mean              result of calculation
-     */
-    public static int getMean(ArrayList<Point> points,int attributeIndex){
-
-        int mean = 0;
-
-        // Mean of population
-        mean = points.stream().mapToInt(point -> point.getAttribute(attributeIndex)).sum();
-        mean = mean / points.size();
-
-        return mean;
-
-    }
 
     /**
-     * FUnction to find variance of population  (number => (x or y))
-     * @param points            ArrayList of coordinates
-     * @param attributeIndex    Index of attribute, which we want to find variance
-     * @return variance         result of calculation
-     */
-    public static int getVariance(ArrayList<Point> points, int attributeIndex){
-
-        double variance = 0;
-        double sumVariance = 0;
-
-        // Mean of population
-        int mean = getMean(points, attributeIndex);
-
-
-        // Variance of population
-        for (int i = 0; i < points.size() ; i++) {
-
-            ArrayList<Integer> point = new ArrayList<>(2);
-
-            sumVariance = Math.pow((points.get(i).getAttribute(attributeIndex) - mean), 2);
-
-        }
-
-        variance = Math.sqrt(sumVariance / points.size());
-
-        return (int)variance;
-
-    }
-
-    /**
-     * Function to get Gaussian Value of variance (sigma_x or sigma_y)
-     * @param coordinate
-     * @param mean
-     * @param variance
-     * @return              Calculated Gaussian Value
-     */
-    public static int getGaussianValue( int coordinate , int mean, int variance ){
-
-        double gaussian = Math.exp(-0.5 * Math.pow((coordinate - mean),2) / Math.pow(variance, 2)) * (1/(variance*Math.sqrt(2*Math.PI)));
-
-        return (int) gaussian;
-    }
-
-
-    /**
-     * Function to create Data for classification
-     * @param   dataSize  number of instances in data
-     * @return  data      created data
+     * Method to create Data for classification
+     * @param dataSize      number of instances in data
+     * @param kCenter       randomly generated center points
+     * @return data         created data
      */
     public static ArrayList<Point> createData(int dataSize, ArrayList<Point> kCenter){
 
-
+        // data for classification
         ArrayList<Point> data = new ArrayList<>(dataSize);
 
-        int x, y, index;
+        // declaring attributes for points
+        int x, y;
 
+        // index for selecting random center point
+        int index;
+
+        // creating 100 new point andding them to data
         for (int i = 0; i < 100 ; i++) {
 
+            // new point for data
             Point point = new Point(2);
 
             // Select a random center c between 0 and k-1
             index = rand.nextInt(kCenter.size());
 
+            // get center point attributes
             int center_x = kCenter.get(index).getAttribute(0);
             int center_y = kCenter.get(index).getAttribute(1);
             int var_x =  kCenter.get(index).getAttribute(2);
             int var_y =  kCenter.get(index).getAttribute(3);
 
-
+            // x and y values for new point
             x = (int) Utility.nextGaussian(var_x, center_x);
             y = (int) Utility.nextGaussian(var_y, center_y);
 
+            // adding new x and y to point
             point.getAttributes().add(x);
             point.getAttributes().add(y);
 
+            // adding new point to data
             data.add(point);
 
         }
         // adding new centers to points
-
         kCenter.forEach(center -> {
             Point point = new Point(2);
             point.getAttributes().add(center.getAttribute(0));
@@ -139,30 +86,36 @@ public class Utility {
     }
 
 
+
     /**
-     * Function to create Data for classification
-     * @param   k         number of centers (also clusters)
-     * @return  data      created data
+     * Method to create random center points
+     * @param k             number of new center points
+     * @return kCenters     created centers
      */
     public static ArrayList<Point> createKCenters(int k){
 
-
         ArrayList<Point> kCenters = new ArrayList<>(k);
 
+        // declaring attributes for new center points
         int x, y;
 
         for (int i = 0; i < k ; i++) {
 
             Point point = new Point(4);
 
+            // x and y values for new center point
             x = rand.nextInt(1000);
             y = rand.nextInt(400);
 
+            // adding new x and y to center point
             point.getAttributes().add(x);
             point.getAttributes().add(y);
+
+            // adding variance for x and y value to center point
             point.getAttributes().add(rand.nextInt((80 - 60) + 1) + 60);
             point.getAttributes().add(rand.nextInt((80 - 60) + 1) + 60);
 
+            // adding center point to list
             kCenters.add(point);
         }
 
@@ -171,7 +124,7 @@ public class Utility {
     }
 
     /**
-     * Function to compute entropy of list
+     * Method to compute entropy of list
      * @param p     input list which we compute its entropy
      * @return      computed entropy
      */
@@ -188,71 +141,7 @@ public class Utility {
 
 
     /**
-     * Function to get entropy of 2D ArrayList
-     */
-    public static ArrayList<Float> getEntropyOfList(ArrayList<ArrayList<Point>> centerOccur){
-
-
-        ArrayList<Integer> sameIndexes = new ArrayList<>();
-        ArrayList<Float> probs = new ArrayList<>();
-        ArrayList<Float> entropyList = new ArrayList<Float>(centerOccur.get(0).size());
-
-
-
-        for (int i = 0; i < centerOccur.get(0).size(); i++) {
-
-            for (int j = 0; j < centerOccur.size(); j++) {
-
-                if (sameIndexes.contains(i))
-                    continue;
-
-                int count = 0;
-                for (int k = j; k < centerOccur.size(); k++) {
-                    if(centerOccur.get(j).get(i).equals(centerOccur.get(k).get(i)))
-                        count++;
-                        sameIndexes.add(k);
-                    }
-
-            probs.add((float) count/centerOccur.size());
-
-            }
-            entropyList.add(Utility.getEntropy(probs));
-            probs.clear();
-        }
-
-        return entropyList;
-    }
-
-
-//    /**
-//     * Function to convert List of Points object To List of ArrayList
-//     */
-//    public  static ArrayList<ArrayList<Integer>> convertPointToList(ArrayList<Point> points){
-//
-//        ArrayList<ArrayList<Integer>> pointList = Utility.createData(points.size(),);
-//
-//
-//        for (int i = 0; i < 100 ; i++) {
-//
-//            int coordinate;
-//
-//            ArrayList<Integer> point = new ArrayList<Integer>(points.get(0).getDimension());
-//
-//            for (int j = 0; j < points.get(0).getDimension(); j++) {
-//
-//                coordinate = points.get(i).getAttribute(j);
-//                point.add(coordinate);
-//            }
-//
-//            pointList.add(point);
-//        }
-//
-//        return pointList;
-//
-//    }
-
-    /**
-     *  Function to get random gaussian value
+     *  Method to get random gaussian value
      * @param deviation
      * @param center
      * @return
@@ -261,7 +150,12 @@ public class Utility {
         return Math.abs(rand.nextGaussian())*deviation + center;
     }
 
-    // Method  to find logarithm
+
+    /** Method  to find logarithm base 2
+     *
+     * @param x     number which we want to find logarithm
+     * @return      computed logarithm
+     */
     public static double log2(double x){
         if (x < 0.000001) return 0;
         return Math.log(x)/Math.log(2);

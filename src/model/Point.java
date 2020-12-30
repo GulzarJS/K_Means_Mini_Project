@@ -81,6 +81,11 @@ public class Point {
 
     public void setAttribute(int index, int value) { this.attributes.set(index, value); }
 
+    /**
+     * Method to compare attributes of points
+     * @param pt    point which we want to compare with this object
+     * @return      boolean value (different => false, same => true
+     */
     public boolean equals(@NotNull Point pt){
         if (this.getDimension() != pt.getDimension())
             return false;

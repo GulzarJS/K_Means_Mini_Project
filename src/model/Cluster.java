@@ -6,47 +6,44 @@ package model;
 
 
 import util.Utility;
-
 import java.util.ArrayList;
 
 public class Cluster {
+
     private ArrayList<Point> points;
     private Point center;
+
+    // index of cluster
     private int   index;
 
+    /**
+     * Constructor of class
+     */
     public Cluster(){
         this.points = new ArrayList<Point>();
     }
 
     /**
-     * Function to find distance between center and given point
+     * Method to find distance between center and given point
      */
     public double distanceTo(Point p){
         return this.center.distanceTo(p);
     }
 
-    /**
-     * Setter and Getter functions
-     */
-    public void setCenter(Point c){ this.center = c; }
-    public void setIndex(int i)   { this.index = i; }
-
-    public Point getCenter() { return this.center; }
-    public int   getIndex()  { return this.index; }
 
     /**
-     * Function to clear points of the cluster
+     * Method to clear points of the cluster
      */
     public void resetPoints(){ this.points = new ArrayList<Point>(); }
 
     /**
-     * Function to add new point to the cluster
+     * Method to add new point to the cluster
      */
     public void addPoint(Point p) {this.points.add(p); }
 
 
     /**
-     * Function to calculate centroid of the cluster
+     * Method to calculate centroid of the cluster
      */
     public void updateCenter() {
 
@@ -68,7 +65,6 @@ public class Cluster {
         }
 
         points.forEach(point -> pAccu.addTo(point));
-
 
         // 2. Now average each component
 
@@ -223,13 +219,6 @@ public class Cluster {
     }
 
 
-    public String toString(){
-        String s = "";
-        s = "=> Cluster "+this.index+" -- Center: "+ this.center +"   Nb points: "+this.points.size();
-        return s;
-    }
-
-
     /**
      * Format output for CSV (with space separator)
      */
@@ -239,4 +228,21 @@ public class Cluster {
             s += p.toString() + this.index + "\n";
         return s;
     }
+
+    /**
+     * Setter and Getter Methods
+     */
+    public void setCenter(Point c){ this.center = c; }
+    public void setIndex(int i)   { this.index = i; }
+
+    public Point getCenter() { return this.center; }
+    public int   getIndex()  { return this.index; }
+
+
+    public String toString(){
+        String s = "";
+        s = "=> Cluster "+this.index+" -- Center: "+ this.center +"   Nb points: "+this.points.size();
+        return s;
+    }
+
 }
