@@ -61,6 +61,12 @@ public class Cluster {
 
         // for each p in the set of points -> add p to pAccu
 
+        // initialising pAccu
+
+        for (int i = 0; i < pAccu.getDimension() ; i++) {
+            pAccu.getAttributes().add(0);
+        }
+
         points.forEach(point -> pAccu.addTo(point));
 
 

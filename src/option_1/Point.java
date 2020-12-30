@@ -4,18 +4,28 @@
 
 package option_1;
 
+import java.util.ArrayList;
+
 public class Point {
-    private int[] attributes; // x and y coordinates
+    public ArrayList<Integer> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<Integer> attributes) {
+        this.attributes = attributes;
+    }
+
+    private ArrayList<Integer> attributes; // x and y coordinates
     private int nbAttributes;   // nb of attributes in the data
 
     public Point(int dim) {
-        this.attributes   = new int[dim];
+        this.attributes   = new ArrayList<Integer>(dim);
         this.nbAttributes = dim;
     }
 
-    public Point(int[] attributes){
+    public Point(ArrayList<Integer> attributes){
         this.attributes   = attributes;
-        this.nbAttributes = attributes.length;
+        this.nbAttributes = attributes.size();
     }
 
     /**
@@ -23,11 +33,11 @@ public class Point {
      */
     public double distanceTo(Point p) {
         double distance = 0;
-        if (this.attributes.length != p.attributes.length)
-            throw new RuntimeException("distanceTo() : p dimensions does not match (this:"+attributes.length+" p:"+p.attributes.length);
+//        if (this.attributes.size() != p.attributes.size())
+//            throw new RuntimeException("distanceTo() : p dimensions does not match (this:"+attributes.size()+" p:"+p.attributes.size());
 
-        for (int i = 0; i < this.attributes.length; i++){
-            double di = p.attributes[i] - this.attributes[i];
+        for (int i = 0; i < this.attributes.size(); i++){
+            double di = p.attributes.get(i) - this.attributes.get(i);
             distance += di*di;
         }
 
@@ -40,9 +50,9 @@ public class Point {
     public void addTo(Point p){
         Point point = new Point(this.nbAttributes);
         float accu  = 0;
-        for (int i = 0; i < this.attributes.length; i++){
-            accu = this.attributes[i] + p.attributes[i];
-            this.attributes[i] = Math.round(accu) ;
+        for (int i = 0; i < p.attributes.size(); i++){
+            accu = this.attributes.get(i) + p.attributes.get(i);
+            this.attributes.set(i,Math.round(accu)) ;
 //            System.out.print(accu + " ");
         }
     }
@@ -59,7 +69,7 @@ public class Point {
      * Getter and Setter functions
      */
     public int   getDimension() { return this.nbAttributes;}
-    public float getAttribute(int index) { return this.attributes[index]; }
+    public int getAttribute(int index) { return this.attributes.get(index); }
 
-    public void setAttribute(int index, int value) { this.attributes[index] = value; }
+    public void setAttribute(int index, int value) { this.attributes.set(index, value); }
 }

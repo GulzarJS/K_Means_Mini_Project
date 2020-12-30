@@ -14,29 +14,17 @@ public class Application {
     public static void main(String[] args) {
 
 
-        Random rand = new Random();
-
-        ArrayList<ArrayList<Integer>> points = new ArrayList<>(100);
-        ArrayList<ArrayList<Integer>> kCenters = new ArrayList<>(4);
-
-        int x, y;
-
-        for (int i = 0; i < 100 ; i++) {
-
-            ArrayList<Integer> point = new ArrayList<>(2);
-
-            x = rand.nextInt(1000);
-            y = rand.nextInt(400);
+        // Number of clusters
+        int k = 2;
 
 
-            point.add(x);
-            point.add(y);
+        ArrayList<ArrayList<Integer>> points = Utility.createData(100);
+        ArrayList<ArrayList<Integer>> kCenters = Utility.createKCenters(k);
 
-            points.add(point);
-        }
+
 
         // Creating k-means object
-        KMeans classifier = new KMeans(points,  2, 2);
+        KMeans classifier = new KMeans(points,  k, 2);
 
         // Creating initial clusters
         System.out.println("*** Initial clusters ***");
