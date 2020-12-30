@@ -47,8 +47,6 @@ public class KMeans {
         for (ArrayList<Integer> instance : kCenters) {
             ArrayList<Integer> centerAttributes = new ArrayList<Integer>(kCenters.get(0).size());
             for (int i = 0; i < kCenters.get(0).size(); i++) centerAttributes.add(instance.get(i));
-
-            System.out.println(this.centers.toString());
             this.centers.add(new Point(centerAttributes));
         }
     }
@@ -120,14 +118,14 @@ public class KMeans {
             int x, y;
 
             // Select a random center c between 0 and k-1
-            index[0] = rand.nextInt(k-1);
+            index[0] = rand.nextInt(k);
 
             int center_x = centers.get(index[0]).getAttribute(0);
             int center_y = centers.get(index[0]).getAttribute(1);
 
-            x = center_x + Utility.getGaussianValue(point.getAttribute(0), Utility.getMean(allPoints,0), Utility.getVariance(allPoints, 0));
+            x = center_x + Utility.getGaussianValue(center_x, Utility.getMean(allPoints,0), Utility.getVariance(allPoints, 0));
 
-            y = center_y + Utility.getGaussianValue(point.getAttribute(1), Utility.getMean(allPoints,1), Utility.getVariance(allPoints, 1));
+            y = center_y + Utility.getGaussianValue(center_y, Utility.getMean(allPoints,1), Utility.getVariance(allPoints, 1));
 
             point.setAttribute(0, x);
             point.setAttribute(1, y);

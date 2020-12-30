@@ -86,7 +86,7 @@ public class Utility {
      */
     public static int getGaussianValue( int coordinate , int mean, int variance ){
 
-        double gaussian = Math.exp(-0.5 * Math.pow((coordinate - mean),2) / Math.pow(variance, 2));
+        double gaussian = Math.exp(-0.5 * Math.pow((coordinate - mean),2) / Math.pow(variance, 2)) * (1/(variance*Math.sqrt(2*Math.PI)));
 
         return (int) gaussian;
     }
@@ -160,5 +160,88 @@ public class Utility {
         }
 
         return kCenters;
+    }
+
+    /**
+     * Function to compute entropy of list
+     * @param p     input list which we compute its entropy
+     * @return      computed entropy
+     */
+    public static float getEntropy(ArrayList<Float> p){
+        float res = 0;
+
+        for (float el:
+                p) {
+            res += el * el;
+        }
+
+        return 1 - res;
+    }
+
+
+    /**
+     * Function to get entropy of 2D ArrayList
+     */
+    public static ArrayList<Float> getEntropyOfList(ArrayList<ArrayList<Point>> centerOccur){
+
+//        ArrayList<Integer> point = new ArrayList<Integer>(allPoints.get(0).size());
+        ArrayList<ArrayList<ArrayList<Integer>>> newCenterOccur = new  ArrayList<ArrayList<ArrayList<Integer>>>(centerOccur.size());
+        ArrayList<Integer> sameIndexes = new ArrayList<>();
+        ArrayList<Float> probs = new ArrayList<>();
+        ArrayList<Float> entropyList = new ArrayList<Float>(centerOccur.get(0).size());
+
+
+//          centerOccur.forEach(pointList -> newCenterOccur.add(convertPointToList(pointList)));
+
+        for (int i = 0; i < centerOccur.get(0).size(); i++) {
+
+            for (int j = 0; j < centerOccur.size(); j++) {
+
+                if (sameIndexes.contains(i))
+                    continue;
+
+                int count = 0;
+                for (int k = j; k < centerOccur.size(); k++) {
+                    if(centerOccur.get(j).get(i).equals(centerOccur.get(k).get(i)))
+                        count++;
+                        sameIndexes.add(k);
+                    }
+
+            probs.add((float) count/centerOccur.size());
+
+            }
+            entropyList.add(Utility.getEntropy(probs));
+            probs.clear();
+        }
+
+        return entropyList;
+    }
+
+
+    /**
+     * Function to convert List of Points object To List of ArrayList
+     */
+    public  static ArrayList<ArrayList<Integer>> convertPointToList(ArrayList<Point> points){
+
+        ArrayList<ArrayList<Integer>> pointList = Utility.createData(points.size());
+
+
+        for (int i = 0; i < 100 ; i++) {
+
+            int coordinate;
+
+            ArrayList<Integer> point = new ArrayList<Integer>(points.get(0).getDimension());
+
+            for (int j = 0; j < points.get(0).getDimension(); j++) {
+
+                coordinate = points.get(i).getAttribute(j);
+                point.add(coordinate);
+            }
+
+            pointList.add(point);
+        }
+
+        return pointList;
+
     }
 }
