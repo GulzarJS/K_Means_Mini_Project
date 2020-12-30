@@ -5,7 +5,10 @@
 package option_2;
 
 
+import util.Utility;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Cluster {
     private ArrayList<Point> points;
@@ -43,6 +46,98 @@ public class Cluster {
      */
     public void addPoint(Point p) {this.points.add(p); }
 
+
+    public float getDensity(){
+        int topY = getTopY();
+        int bottomY = getBottomY();
+        int leftX = getLeftX();
+        int rightX = getRightX();
+
+        int area = (bottomY - topY) * (rightX - leftX);
+
+        return (float) area/points.size();
+    }
+
+    private int getTopY(){
+        Point resPt = points.get(0);
+        int minY = points.get(0).getAttribute(1);
+
+        for (Point pt :
+                points) {
+            if (pt.getAttribute(1) < minY){
+                resPt = pt;
+                minY = pt.getAttribute(1);
+            }
+        }
+
+        return minY;
+    }
+
+    private int getBottomY(){
+        Point resPt = points.get(0);
+        int maxY = points.get(0).getAttribute(1);
+
+        for (Point pt :
+                points) {
+            if (pt.getAttribute(1) > maxY){
+                resPt = pt;
+                maxY = pt.getAttribute(1);
+            }
+        }
+
+        return maxY;
+    }
+
+    private int getLeftX(){
+        Point resPt = points.get(0);
+        int minX = points.get(0).getAttribute(0);
+
+        for (Point pt :
+                points) {
+            if (pt.getAttribute(0) < minX){
+                resPt = pt;
+                minX = pt.getAttribute(1);
+            }
+        }
+
+        return minX;
+    }
+
+    private int getRightX(){
+        Point resPt = points.get(0);
+        int maxX = points.get(0).getAttribute(0);
+
+        for (Point pt :
+                points) {
+            if (pt.getAttribute(0) > maxX){
+                resPt = pt;
+                maxX = pt.getAttribute(1);
+            }
+        }
+
+        return maxX;
+    }
+
+    public float getScattering(){
+        ArrayList<Integer> sameIndexes = new ArrayList<>();
+        ArrayList<Float> probs = new ArrayList<>();
+
+        for (int i = 0; i < this.points.size(); i++) {
+            if (sameIndexes.contains(i))
+                continue;
+
+            int count = 0;
+            for (int j = i; j < this.points.size(); j++) {
+                if(this.points.get(i).Equals(this.points.get(j))){
+                    count++;
+                    sameIndexes.add(j);
+                }
+            }
+            probs.add((float) count/this.points.size());
+        }
+
+        return Utility.getEntropy(probs);
+    }
 
     /**
      * Function to calculate centroid of the cluster

@@ -61,7 +61,18 @@ public class Point {
      * Getter and Setter functions
      */
     public int   getDimension() { return this.nbAttributes;}
-    public float getAttribute(int index) { return this.attributes[index]; }
+    public int getAttribute(int index) { return this.attributes[index]; }
 
     public void setAttribute(int index, int value) { this.attributes[index] = value; }
+
+    public boolean Equals(Point pt){
+        if (this.getDimension() != pt.getDimension())
+            return false;
+
+        for (int i = 0; i < this.attributes.length; i++) {
+            if(this.getAttribute(i) != pt.getAttribute(i))
+                return false;
+        }
+        return true;
+    }
 }
