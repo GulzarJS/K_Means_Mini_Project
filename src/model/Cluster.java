@@ -82,7 +82,7 @@ public class Cluster {
 
 
     /**
-     *  Function to calculate the density of the cluster
+     *  Method to calculate the density of the cluster
      */
     public float getDensity(){
         int topY = getTopY();
@@ -96,7 +96,7 @@ public class Cluster {
     }
 
     /**
-     * Function to get the point's y attribute which is in the top
+     * Method to get the point's y attribute which is in the top
      */
     private int getTopY(){
 
@@ -119,7 +119,7 @@ public class Cluster {
 
 
     /**
-     * Function to get the point's y attribute which is in the bottom
+     * Method to get the point's y attribute which is in the bottom
      */
     private int getBottomY(){
 
@@ -142,7 +142,7 @@ public class Cluster {
 
 
     /**
-     * Function to get the point's x attribute which is in the left
+     * Method to get the point's x attribute which is in the left
      */
     private int getLeftX(){
 
@@ -165,7 +165,7 @@ public class Cluster {
 
 
     /**
-     * Function to get the point's x attribute which is in the right
+     * Method to get the point's x attribute which is in the right
      */
     private int getRightX(){
 
@@ -187,7 +187,7 @@ public class Cluster {
     }
 
     /**
-     * Function to calculate the scattering of the cluster
+     * Method to calculate the scattering of the cluster
      */
     public float getScattering(){
         ArrayList<Integer> sameIndexes = new ArrayList<>();
@@ -212,7 +212,7 @@ public class Cluster {
     }
 
     /**
-     * Function to get the size of the cluster
+     * Method to get the size of the cluster
      */
     public int getSize(){
         return this.points.size();

@@ -1,39 +1,91 @@
 /*
- *  Created by Gulzar Safar on 12/28/2020
+ *  Created by Gulzar Safar & Aghateymur Hasanzade on 12/28/2020
  */
 
+import model.*;
+import util.Utility;
+
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Random rand = new Random();
 
-        ArrayList<ArrayList<Integer>> points = new ArrayList<>(100);
-        ArrayList<ArrayList<Integer>> kCenters = new ArrayList<>(4);
+        // Number of clusters
+        int k = 5;
 
-        int x, y;
+        // Entropy of clustering
+        double entropy;
 
-        for (int i = 0; i < 100 ; i++) {
+        // Weight of the density and scattering in Quality formula
+        float densityWeight = 1, scatteringWeight = 1;
 
-            ArrayList<Integer> point = new ArrayList<>(2);
+        // Creating random centers and data for classification
+        ArrayList<Point> kCenters = Utility.createKCenters(k);
+        ArrayList<Point> data = Utility.createData(100, kCenters);
 
-            x = rand.nextInt(1000);
-            y = rand.nextInt(400);
+        // Dictionary for holding entropies and qualities for each k
+        Dictionary<Integer,Float> entropies = new Hashtable<>();
+        Dictionary<Integer,Float> qualitites = new Hashtable<>();
 
 
-            point.add(x);
-            point.add(y);
+        // Looping through k-s
+        for(k = 2; k <= 20; k++) {
 
-            points.add(point);
+            // List for holding center points of each cluster
+            ArrayList<Point> centerOccur = new ArrayList<Point>();
+
+            // Quality for the current k
+            float quality = 0;
+
+            // Run k means algorithm l times
+            for (int l = 0; l < 32; l++) {
+
+                // Initializing new KMeans object
+                KMeans classifier = new KMeans(data, k);
+
+                // Creating initial clusters
+                classifier.initClusters();
+
+                // Doing clustering 100 times
+                for(int i = 0; i < 100; i++) {
+                    classifier.kMeansStep();
+                }
+
+                // Loop through each cluster
+                for (int j = 0; j < k; j++) {
+                    Cluster clust = classifier.getCluster(j);
+
+                    // Add only unique centers
+                    if(!centerOccur.contains(clust.getCenter())) {
+                        centerOccur.add(clust.getCenter());
+                    }
+
+                    // We should only calculate quality once for each k, so do it at the last k means run
+                    if (l == 31){
+                        quality += clust.getSize()*(densityWeight * clust.getDensity() + scatteringWeight * clust.getScattering());
+                    }
+                }
+
+
+                System.out.println("\n*** Final clusters ***");
+                classifier.printClusters();
+
+            }
+
+            // Calculation of entropy of clustering
+            entropy = Utility.log2(centerOccur.size());
+
+            // Add entropy and quality to their respective dictionaries with the key of k
+            entropies.put(k, (float) entropy);
+            qualitites.put(k, quality);
         }
 
-        points.forEach(point -> {
-            System.out.println(point.toString());
-        });
+        System.out.println("Ent: " + entropies.toString());
+        System.out.println("Qual: " + qualitites.toString());
 
     }
-
 }

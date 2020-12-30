@@ -5,18 +5,12 @@
 package model;
 
 
-import util.Utility;
-import java.util.Random;
 import java.util.ArrayList;
 
 public class KMeans {
 
     // number of clusters
     private int k;
-
-
-
-
 
     private ArrayList<Point>   allPoints;
     private ArrayList<Cluster> clusters;
@@ -121,10 +115,6 @@ public class KMeans {
      */
 
     public Cluster getCluster(int index){return this.clusters.get(index); }
-
-    public ArrayList<Point> getAllPoints() {
-        return allPoints;
-    }
 
 
     public String toString() {
