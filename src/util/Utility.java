@@ -250,7 +250,7 @@ public class Utility {
      * @return
      */
     public static double nextGaussian(float deviation, float center) {
-        return rand.nextGaussian()*deviation + center;
+        return Math.abs(rand.nextGaussian())*deviation + center;
     }
 
 }
