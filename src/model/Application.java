@@ -2,12 +2,11 @@
  *  Created by Gulzar Safar on 12/28/2020
  */
 
-package option_1;
+package model;
 
 import util.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Application {
 
@@ -23,8 +22,8 @@ public class Application {
         ArrayList<ArrayList<Point>> centerOccur = new ArrayList<ArrayList<Point>>(32);
 
 
+        // adding new centers to points
         kCenters.forEach(center -> {
-
             points.add(center);
         });
 
@@ -36,7 +35,7 @@ public class Application {
         classifier.initClusters();
         classifier.printClusters();
 
-        // Doing clustering 1000 times
+        // Doing clustering 32 times
         for(int i = 0; i < 32; i++) {
             classifier.kMeansStep();
 

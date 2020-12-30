@@ -5,7 +5,7 @@
 package util;
 
 
-import option_1.Point;
+import model.Point;
 
 import java.io.*;
 import java.util.ArrayList;

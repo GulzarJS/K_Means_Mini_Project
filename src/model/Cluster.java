@@ -2,19 +2,17 @@
  *  Created by Gulzar Safar on 12/28/2020
  */
 
-package option_2;
+package model;
 
 
 import util.Utility;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Cluster {
     private ArrayList<Point> points;
     private Point center;
     private int   index;
-//    private float entropy;
 
     public Cluster(){
         this.points = new ArrayList<Point>();
@@ -46,6 +44,45 @@ public class Cluster {
      */
     public void addPoint(Point p) {this.points.add(p); }
 
+
+    /**
+     * Function to calculate centroid of the cluster
+     */
+    public void updateCenter() {
+
+        if (this.points.size() == 0) {
+            this.center = new Point(this.center.getDimension());
+            return;
+        }
+
+        int nbPoints = this.points.size();
+        Point pAccu  = new Point(this.points.get(0).getDimension());
+
+        // 1. Accumulate the components of all points in the cluster
+
+        // for each p in the set of points -> add p to pAccu
+
+        // initialising pAccu
+        for (int i = 0; i < pAccu.getDimension() ; i++) {
+            pAccu.getAttributes().add(0);
+        }
+
+        points.forEach(point -> pAccu.addTo(point));
+
+
+        // 2. Now average each component
+
+        // for each dimension i of pAccu do
+        for (int i = 0; i < pAccu.getDimension(); i++) {
+
+            // attribute i <- attribute i / nbPoints
+            int attr = (int) (Math.round((pAccu.getAttribute(i) / nbPoints)));
+            pAccu.setAttribute(i, attr);
+
+        }
+
+        this.center = pAccu;
+    }
 
     public float getDensity(){
         int topY = getTopY();
@@ -128,6 +165,7 @@ public class Cluster {
 
             int count = 0;
             for (int j = i; j < this.points.size(); j++) {
+
                 if(this.points.get(i).Equals(this.points.get(j))){
                     count++;
                     sameIndexes.add(j);
@@ -139,46 +177,13 @@ public class Cluster {
         return Utility.getEntropy(probs);
     }
 
-    /**
-     * Function to calculate centroid of the cluster
-     */
-    public void updateCenter() {
-
-        if (this.points.size() == 0) {
-            this.center = new Point(this.center.getDimension());
-            return;
-        }
-
-        int nbPoints = this.points.size();
-        Point pAccu  = new Point(this.points.get(0).getDimension());
-
-        // 1. Accumulate the components of all points in the cluster
-
-        // for each p in the set of points -> add p to pAccu
-
-        points.forEach(point -> pAccu.addTo(point));
-
-
-        // 2. Now average each component
-
-        // for each dimension i of pAccu do
-        for (int i = 0; i < pAccu.getDimension(); i++) {
-
-            // attribute i <- attribute i / nbPoints
-            int attr = (int) (Math.round((pAccu.getAttribute(i) / nbPoints)));
-            pAccu.setAttribute(i, attr);
-
-        }
-
-        this.center = pAccu;
-    }
-
 
     public String toString(){
         String s = "";
         s = "=> Cluster "+this.index+" -- Center: "+ this.center +"   Nb points: "+this.points.size();
         return s;
     }
+
 
     /**
      * Format output for CSV (with space separator)

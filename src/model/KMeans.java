@@ -2,11 +2,11 @@
  *  Created by Gulzar Safar on 12/28/2020
  */
 
-package option_2;
+package model;
 
 
 import util.Utility;
-
+import java.util.Random;
 import java.util.ArrayList;
 
 public class KMeans {
@@ -17,25 +17,36 @@ public class KMeans {
         return allPoints;
     }
 
+
     private ArrayList<Point>   allPoints;
     private ArrayList<Cluster> clusters;
+    private ArrayList<Point>   centers;
+
+    private static Random rand = new Random();
 
 
     /**
-     * Parameter: nbAttributes (assumes that the first 4 attributes are float)
+     * Parameter: nbAttributes number of coordinates ( 2 => x and y )
      */
 
-    public KMeans(ArrayList<ArrayList<Integer>> data, int k, int nbAttributes) {
+    public KMeans(ArrayList<ArrayList<Integer>> data, ArrayList<ArrayList<Integer>> kCenters, int k, int nbAttributes) {
         this.k = k;
         this.allPoints = new ArrayList<Point>();
         this.clusters = new ArrayList<Cluster>();
-
+        this.centers = new ArrayList<Point>();
 
         // read all datas and create all points with attributes
         for (ArrayList<Integer> instance : data) {
-            int[] attributes = new int[nbAttributes];
-            for (int i = 0; i < nbAttributes; i++) attributes[i] = instance.get(i);
+            ArrayList<Integer> attributes = new ArrayList<Integer>(nbAttributes);
+            for (int i = 0; i < nbAttributes; i++) attributes.add(instance.get(i));
             this.allPoints.add(new Point(attributes));
+        }
+
+        // read all center points and create centers with attributes
+        for (ArrayList<Integer> instance : kCenters) {
+            ArrayList<Integer> centerAttributes = new ArrayList<Integer>(kCenters.get(0).size());
+            for (int i = 0; i < kCenters.get(0).size(); i++) centerAttributes.add(instance.get(i));
+            this.centers.add(new Point(centerAttributes));
         }
     }
 
@@ -46,14 +57,13 @@ public class KMeans {
     public void initClusters(){
         int rand_index = 0;
 
-        for (int i = 0; i <k ; i++) {
+        for (int i = 0; i < k ; i++) {
 
             // create new cluster c
             Cluster c = new Cluster();
-            // choose a random point index in [0;150[
-            rand_index = (int) (Math.random()*(this.allPoints.size()));
+
             // get point rand_index in the set of points and assign to new point p
-            Point p = allPoints.get(rand_index);
+            Point p = centers.get(i);
             // assign p as the center of c
             c.setCenter(p);
             c.setIndex(i);
@@ -96,9 +106,27 @@ public class KMeans {
         // For each cluster c -> reset all points in c
         this.clusters.forEach( Cluster::resetPoints);
 
+        // index of chosen center
+        final int[] index = new int[1];
+
+
         // For each point p in the dataset
         allPoints.forEach( point -> {
 
+            // coordinates
+            int x, y;
+
+            // Select a random center c between 0 and k-1
+            index[0] = rand.nextInt(k);
+
+            int center_x = centers.get(index[0]).getAttribute(0);
+            int center_y = centers.get(index[0]).getAttribute(1);
+
+            x = (int) Utility.nextGaussian(60, center_x);
+            y = (int) Utility.nextGaussian(70, center_y);
+
+            point.setAttribute(0, x);
+            point.setAttribute(1, y);
             // find the nearest cluster c to p
             int nearest_c_index = this.findNearestCluster(point);
             // add the point p to c
