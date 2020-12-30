@@ -8,6 +8,8 @@ import util.Utility;
 
 import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class Application {
 
@@ -15,63 +17,67 @@ public class Application {
 
 
         // Number of clusters
-        int k = 3;
+        int k = 5;
         double entropy;
+
+        float densityWeight = 1, scatteringWeight = 1;
 
 
         ArrayList<Point> kCenters = Utility.createKCenters(k);
         ArrayList<Point> data = Utility.createData(100, kCenters);
-        ArrayList<ArrayList<Point>> centerOccur = new ArrayList<ArrayList<Point>>(32);
+
+        Dictionary<Integer,Float> entropies = new Hashtable<>();
+        Dictionary<Integer,Float> qualitites = new Hashtable<>();
 
 
 
 
-        // Creating k-means object
-        KMeans classifier = new KMeans(data, k);
+        for(k = 2; k <= 20; k++) {
+            ArrayList<Point> centerOccur = new ArrayList<Point>();
 
-        // Creating initial clusters
-        System.out.println("*** Initial clusters ***");
-        classifier.initClusters();
-        classifier.printClusters();
+            float quality = 0;
 
-        // Doing clustering 32 times
-        for(int i = 0; i < 32; i++) {
-            classifier.kMeansStep();
+            for (int l = 0; l < 32; l++) {
 
-            ArrayList<Point> centerList = new ArrayList<Point>(k);
-            for (int j = 0; j < k; j++) {
-                centerList.add(classifier.getCluster(j).getCenter());
+                KMeans classifier = new KMeans(data, k);
+
+                // Creating initial clusters
+                classifier.initClusters();
+
+                // Doing clustering 100 times
+                for(int i = 0; i < 100; i++) {
+                    classifier.kMeansStep();
+                }
+
+                for (int j = 0; j < k; j++) {
+                    Cluster clust = classifier.getCluster(j);
+                    if(!centerOccur.contains(clust.getCenter())) {
+                        centerOccur.add(clust.getCenter());
+                    }
+
+                    if (l == 31){
+                        quality += clust.getSize()*(densityWeight * clust.getDensity() + scatteringWeight * clust.getScattering());
+                    }
+                }
+
+
+                System.out.println("\n*** Final clusters ***");
+                classifier.printClusters();
 
             }
 
-            if(centerOccur.contains(centerList) == false) {
-                centerOccur.add(centerList);
-            }
 
+            entropy = Utility.log2(centerOccur.size());
+
+            entropies.put(k, (float) entropy);
+            qualitites.put(k, quality);
+
+//            System.out.println("Ent: " + entropy);
+//            System.out.println("Qual: " + quality);
         }
 
-
-
-        System.out.println("\n*** Final clusters ***");
-        classifier.printClusters();
-
-
-        entropy = Utility.log2(centerOccur.size());
-
-        System.out.println(entropy);
-
-
-//        System.out.println(centerOccur.size());
-//        centerOccur.forEach(element -> System.out.println(element.toString()));
-
-
-        // Exporting data to file
-        Utility.exportDataToCSV("clusters.data", classifier.toString());
-
-
-
-        // Reading data from new file for plotting
-//        ArrayList<ArrayList<Float>> newData = Utility.dataForScatterPlot("src/dataset/clusters.data", " ", 5);
+        System.out.println("Ent: " + entropies.toString());
+        System.out.println("Qual: " + qualitites.toString());
 
     }
 }

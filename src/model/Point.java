@@ -4,6 +4,8 @@
 
 package model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class Point {
@@ -79,7 +81,7 @@ public class Point {
 
     public void setAttribute(int index, int value) { this.attributes.set(index, value); }
 
-    public boolean Equals(Point pt){
+    public boolean equals(@NotNull Point pt){
         if (this.getDimension() != pt.getDimension())
             return false;
 

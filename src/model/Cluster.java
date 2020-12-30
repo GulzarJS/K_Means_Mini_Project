@@ -84,6 +84,10 @@ public class Cluster {
         this.center = pAccu;
     }
 
+
+    /**
+     *  Function to calculate the density of the cluster
+     */
     public float getDensity(){
         int topY = getTopY();
         int bottomY = getBottomY();
@@ -95,7 +99,14 @@ public class Cluster {
         return (float) area/points.size();
     }
 
+    /**
+     * Function to get the point's y attribute which is in the top
+     */
     private int getTopY(){
+
+        if (points.size() < 1)
+            return 0;
+
         Point resPt = points.get(0);
         int minY = points.get(0).getAttribute(1);
 
@@ -110,7 +121,15 @@ public class Cluster {
         return minY;
     }
 
+
+    /**
+     * Function to get the point's y attribute which is in the bottom
+     */
     private int getBottomY(){
+
+        if (points.size() < 1)
+            return 0;
+
         Point resPt = points.get(0);
         int maxY = points.get(0).getAttribute(1);
 
@@ -125,7 +144,15 @@ public class Cluster {
         return maxY;
     }
 
+
+    /**
+     * Function to get the point's x attribute which is in the left
+     */
     private int getLeftX(){
+
+        if (points.size() < 1)
+            return 0;
+
         Point resPt = points.get(0);
         int minX = points.get(0).getAttribute(0);
 
@@ -140,7 +167,15 @@ public class Cluster {
         return minX;
     }
 
+
+    /**
+     * Function to get the point's x attribute which is in the right
+     */
     private int getRightX(){
+
+        if (points.size() < 1)
+            return 0;
+
         Point resPt = points.get(0);
         int maxX = points.get(0).getAttribute(0);
 
@@ -156,8 +191,7 @@ public class Cluster {
     }
 
     /**
-     *
-     * @return
+     * Function to calculate the scattering of the cluster
      */
     public float getScattering(){
         ArrayList<Integer> sameIndexes = new ArrayList<>();
@@ -170,7 +204,7 @@ public class Cluster {
             int count = 0;
             for (int j = i; j < this.points.size(); j++) {
 
-                if(this.points.get(i).Equals(this.points.get(j))){
+                if(this.points.get(i).equals(this.points.get(j))){
                     count++;
                     sameIndexes.add(j);
                 }
@@ -179,6 +213,13 @@ public class Cluster {
         }
 
         return Utility.getEntropy(probs);
+    }
+
+    /**
+     * Function to get the size of the cluster
+     */
+    public int getSize(){
+        return this.points.size();
     }
 
 
