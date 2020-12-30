@@ -15,11 +15,11 @@ public class Point {
 
     /**
      * Constructor of class
-     * @param dim   number of attributes
+     * @param nbAttributes   number of attributes
      */
-    public Point(int dim) {
-        this.attributes   = new ArrayList<Integer>(dim);
-        this.nbAttributes = dim;
+    public Point(int nbAttributes) {
+        this.attributes   = new ArrayList<Integer>(nbAttributes);
+        this.nbAttributes = nbAttributes;
     }
 
 
