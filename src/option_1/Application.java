@@ -15,7 +15,7 @@ public class Application {
 
 
         // Number of clusters
-        int k = 2;
+        int k = 3;
 
 
         ArrayList<ArrayList<Integer>> points = Utility.createData(100);
@@ -23,6 +23,10 @@ public class Application {
         ArrayList<ArrayList<Point>> centerOccur = new ArrayList<ArrayList<Point>>(32);
 
 
+        kCenters.forEach(center -> {
+
+            points.add(center);
+        });
 
         // Creating k-means object
         KMeans classifier = new KMeans(points, kCenters,  k, 2);
@@ -33,7 +37,7 @@ public class Application {
         classifier.printClusters();
 
         // Doing clustering 1000 times
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 32; i++) {
             classifier.kMeansStep();
 
             ArrayList<Point> centerList = new ArrayList<Point>(k);

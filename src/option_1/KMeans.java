@@ -58,7 +58,7 @@ public class KMeans {
     public void initClusters(){
         int rand_index = 0;
 
-        for (int i = 0; i <k ; i++) {
+        for (int i = 0; i < k ; i++) {
 
             // create new cluster c
             Cluster c = new Cluster();
@@ -123,9 +123,8 @@ public class KMeans {
             int center_x = centers.get(index[0]).getAttribute(0);
             int center_y = centers.get(index[0]).getAttribute(1);
 
-            x = center_x + Utility.getGaussianValue(center_x, Utility.getMean(allPoints,0), Utility.getVariance(allPoints, 0));
-
-            y = center_y + Utility.getGaussianValue(center_y, Utility.getMean(allPoints,1), Utility.getVariance(allPoints, 1));
+            x = (int) Utility.nextGaussian(60, center_x);
+            y = (int) Utility.nextGaussian(70, center_y);
 
             point.setAttribute(0, x);
             point.setAttribute(1, y);

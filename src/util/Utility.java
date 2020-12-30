@@ -184,14 +184,12 @@ public class Utility {
      */
     public static ArrayList<Float> getEntropyOfList(ArrayList<ArrayList<Point>> centerOccur){
 
-//        ArrayList<Integer> point = new ArrayList<Integer>(allPoints.get(0).size());
-        ArrayList<ArrayList<ArrayList<Integer>>> newCenterOccur = new  ArrayList<ArrayList<ArrayList<Integer>>>(centerOccur.size());
+
         ArrayList<Integer> sameIndexes = new ArrayList<>();
         ArrayList<Float> probs = new ArrayList<>();
         ArrayList<Float> entropyList = new ArrayList<Float>(centerOccur.get(0).size());
 
 
-//          centerOccur.forEach(pointList -> newCenterOccur.add(convertPointToList(pointList)));
 
         for (int i = 0; i < centerOccur.get(0).size(); i++) {
 
@@ -244,4 +242,15 @@ public class Utility {
         return pointList;
 
     }
+
+    /**
+     *  Function to get random gaussian value
+     * @param deviation
+     * @param center
+     * @return
+     */
+    public static double nextGaussian(float deviation, float center) {
+        return rand.nextGaussian()*deviation + center;
+    }
+
 }
