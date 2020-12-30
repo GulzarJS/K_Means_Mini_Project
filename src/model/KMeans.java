@@ -11,20 +11,20 @@ import java.util.ArrayList;
 
 public class KMeans {
 
+    // number of clusters
     private int k;
 
-    public ArrayList<Point> getAllPoints() {
-        return allPoints;
-    }
+
+
 
 
     private ArrayList<Point>   allPoints;
     private ArrayList<Cluster> clusters;
 
-    private static Random rand = new Random();
-
 
     /**
+     * Constructor of class
+     *
      * Parameter: nbAttributes number of coordinates ( 2 => x and y )
      */
 
@@ -36,9 +36,8 @@ public class KMeans {
     }
 
     /**
-     * Function to initialize clusters
+     * Method to initialize clusters
      */
-
     public void initClusters(){
         int rand_index = 0;
 
@@ -60,9 +59,8 @@ public class KMeans {
     }
 
     /**
-     * Function to find nearest cluster
+     * Method to find nearest cluster
      */
-
     private int findNearestCluster(Point p){
         int   target_cluster = -1;
         float dMin = Float.MAX_VALUE;
@@ -85,7 +83,7 @@ public class KMeans {
     }
 
     /**
-     *  Function to perform k-means steps
+     *  Method to perform k-means steps
      */
     public void kMeansStep(){
 
@@ -113,15 +111,20 @@ public class KMeans {
 
 
     /**
-     * Function to print Clusters
+     * Method to print Clusters
      */
     public void printClusters(){ for (Cluster c: clusters) System.out.println(c);  }
 
+
     /**
-     * Getter functions
+     * Getter Methods
      */
-    public int getK() { return this.k; }
+
     public Cluster getCluster(int index){return this.clusters.get(index); }
+
+    public ArrayList<Point> getAllPoints() {
+        return allPoints;
+    }
 
 
     public String toString() {
