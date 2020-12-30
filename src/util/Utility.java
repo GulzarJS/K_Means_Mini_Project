@@ -72,4 +72,15 @@ public class Utility {
 //
 //        return readyData;
 //    }
+
+    public static float getEntropy(ArrayList<Float> p){
+        float res = 0;
+
+        for (float el:
+                p) {
+            res += el * el;
+        }
+
+        return 1 - res;
+    }
 }
