@@ -8,24 +8,82 @@ import util.Utility;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import org.apache.commons.cli.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
+        // initialize cli parser
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd;
 
-        // Number of clusters
+        Options options = new Options();
+
+        options.addOption("K", true, "k value for creating the date");
+        options.addOption("N", true, "creates N points");
+        options.addOption("q", "kNumber", true, "check k-s till kNumber");
+        options.addOption("l", "algoRun", true, "number of times to run each k in k means algorithm");
+        options.addOption("t", "regenCenter", true, "number of times to recreate centers for each k");
+        options.addOption("a", "densityWeight", true, "weight of the density in quality formula");
+        options.addOption("b", "scatteringWeight", true, "weight of the scattering in quality formula");
+        options.addOption("h", "help", false, "help");
+
+        // Starting params. Described above
         int k = 5;
-
-        // Entropy of clustering
-        double entropy;
+        int N = 100;
+        int kNumber = 20;
+        int algoRun = 32;
+        int regenCenter = 100;
 
         // Weight of the density and scattering in Quality formula
         float densityWeight = 1, scatteringWeight = 1;
 
+        // Parse cli arguments
+        try {
+            cmd = parser.parse(options, args);
+
+            if(cmd.hasOption('K')) {
+                k = Integer.parseInt(cmd.getParsedOptionValue("K").toString());
+            }
+            if(cmd.hasOption('N')) {
+                N = Integer.parseInt(cmd.getParsedOptionValue("N").toString());
+            }
+            if(cmd.hasOption('q')) {
+                kNumber = Integer.parseInt(cmd.getParsedOptionValue("q").toString());
+            }
+            if(cmd.hasOption('l')) {
+                algoRun = Integer.parseInt(cmd.getParsedOptionValue("l").toString());
+            }
+            if(cmd.hasOption('t')) {
+                regenCenter = Integer.parseInt(cmd.getParsedOptionValue("t").toString());
+            }
+            if(cmd.hasOption('a')) {
+                densityWeight = Float.parseFloat(cmd.getParsedOptionValue("a").toString());
+            }
+            if(cmd.hasOption('b')) {
+                scatteringWeight = Float.parseFloat(cmd.getParsedOptionValue("b").toString());
+            }
+            if(cmd.hasOption('h')) {
+                formatter.printHelp("k means project", options);
+                System.exit(0);
+            }
+
+        } catch (ParseException e) {
+            formatter.printHelp("k means project", options);
+
+            System.exit(1);
+        }
+
+
+        // Entropy of clustering
+        double entropy;
+
+
         // Creating random centers and data for classification
         ArrayList<Point> kCenters = Utility.createKCenters(k);
-        ArrayList<Point> data = Utility.createData(100, kCenters);
+        ArrayList<Point> data = Utility.createData(N, kCenters);
 
         // Dictionary for holding entropies and qualities for each k
         Dictionary<Integer,Float> entropies = new Hashtable<>();
@@ -33,7 +91,7 @@ public class Main {
 
 
         // Looping through k-s
-        for(k = 2; k <= 20; k++) {
+        for(k = 2; k <= kNumber; k++) {
 
             // List for holding center points of each cluster
             ArrayList<Point> centerOccur = new ArrayList<Point>();
@@ -42,7 +100,7 @@ public class Main {
             float quality = 0;
 
             // Run k means algorithm l times
-            for (int l = 0; l < 32; l++) {
+            for (int l = 0; l < algoRun; l++) {
 
                 // Initializing new KMeans object
                 KMeans classifier = new KMeans(data, k);
@@ -50,8 +108,8 @@ public class Main {
                 // Creating initial clusters
                 classifier.initClusters();
 
-                // Doing clustering 100 times
-                for(int i = 0; i < 100; i++) {
+                // Doing clustering regenCenter times
+                for(int i = 0; i < regenCenter; i++) {
                     classifier.kMeansStep();
                 }
 
@@ -84,8 +142,8 @@ public class Main {
             qualitites.put(k, quality);
         }
 
-        System.out.println("Ent: " + entropies.toString());
-        System.out.println("Qual: " + qualitites.toString());
+        System.out.println("Entropy: " + entropies.toString());
+        System.out.println("Quality: " + qualitites.toString());
 
     }
 }
